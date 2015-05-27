@@ -15,7 +15,8 @@ http.createServer(function handler(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.end(index.toString());
   }
-  if (url.indexOf('/find/') > -1) {
+
+  if(url.indexOf('/find/') > -1) {
     // locahost:3000/find/word
     var word = url.split('/')[2];
     // console.log(word);
@@ -25,9 +26,25 @@ http.createServer(function handler(request, response) {
     });
     // response.end('word: ', word);
   }
-  else {
-    response.end('hello Dan!');
+
+  if(url.indexOf('/stat/') > -1){
+    var word = url.split('/')[2];
+    ac.stats(word, function (err, data){
+      response.end(JSON.stringify(data));
+    })
   }
+
+  if(url.indexOf('/mydef/') > -1){
+    var word = url.split('/')[2];
+    ac.definition(word, function (err, data){
+      response.end(data);
+    });
+
+
+  }
+  // else{
+  //   response.end('hello Dan!');
+  // }
 
 }).listen(port);
 

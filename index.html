@@ -8,14 +8,24 @@
 
       <header>
      <ul id="nav">
-        <li><a href="#" id='searchlistTag'>Search</a></li>
-        <li><a href="#" id='playlistTag'>Playlist</a></li>
+        <li><a href="#">Search</a></li>
+        <li><a href="#">Stats</a></li>
     </ul>
 </header>
 
       <h1>Search your words!</h1>
       <input type='text' id='search'> </input>
-      <div id='results'> </div>
+      <div>
+        <ul id='results'>
+        </ul>
+      </div>
+
+      <div>
+        <ul id='stats'>
+        </ul>
+      </div>
+
+
     </div>
 
     <style>
@@ -32,7 +42,12 @@ body {
   bottom: 0;
   position: fixed;
 }
+
+.resultItem{
+  cursor: pointer;
+}
     </style>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
     <div id="qunit"></div>
@@ -41,14 +56,59 @@ body {
 
     <script>
 
-test('Search for words beginning with awes', function(assert){
+
+
+test('Search for ddd beginning with awes', function(assert){
   var done = assert.async();
   $.get('/find/awes', function handler(data) {
-    //console.log(data);
     var words = data.split(',');
     assert.equal(words.length, 4, 'number of suggestions for awes is 4');
+    done();
   });
 });
+
+test("search is NOT case-sensitive", function(assert){
+  var done = assert.async();
+  $.get('/find/AWES', function handler(data) {
+    var words = data.split(',');
+    assert.equal(words.length, 4, 'number of suggestions for AWES is 4');
+    done();
+  });
+});
+
+
+
+test("Searching for qqq returns 'no search results' message", function(assert){
+  var done = assert.async();
+  $.get('/find/qqq', function handler(data) {
+    assert.equal(data, "", 'no results');
+    done();
+  });
+});
+
+test("Clicking on a word increases # of times it's been searched for in the stats", function(assert){
+  var done = assert.async();
+  var number = 0;
+  $.get('/stat/fake', function handler(data){
+    var obj = JSON.parse(data);
+    number = obj['fake'].length;
+    $.get('/stat/fake', function handler(data){
+      var obj = JSON.parse(data);
+       assert.equal(obj['fake'].length, number + 1, "the stat is right")
+       done();
+    });
+  });
+});
+
+// test("clicking on a word brings up a box with its definition", function(){
+
+// });
+
+
+
+// test("clicking on stats tab switches to stats tab", function(){
+
+// });
 
     </script>
 
@@ -57,17 +117,41 @@ test('Search for words beginning with awes', function(assert){
   $('#search').keyup(function(e) {
     var word = $('#search').val();
     if (word.length > 2) {
-      $.get('/find/'+word, function handler(data) {
-        console.log(data.length);
-        var words = data.split(',');
-        var results = '';
-        for(var i=0; i < words.length; i++) {
-          results += "<p> " + words[i] + "</p>";
+      $.get('/find/'+ word, function handler(data) {
+         if(data === "") {
+          $('#results').html("Nothing matched your search term");
+        } else {
+          var words = data.split(',');
+          var results = '';
+          for(var i=0; i < words.length; i++) {
+            results += "<li class='resultItem'>" + words[i] + "</li>"
+            //results += "<p> " + words[i] + "</p>";
+          }
+          $('#results').html(results);
         }
-        $('#results').html(results);
+        $('.resultItem').click(function(e){
+          var term = e.target.innerHTML;
+          $.get('/stat/'+ term, function handler(data){
+            var wordStat = JSON.parse(data);
+            var myArray = wordStat[term];
+            var results = '';
+            for(var i=0; i < myArray.length; i++) {
+              results += "<li class='resultStat'>" + myArray[i] + "</li>"
+            }
+            $('#stats').html(results);
+          });
+
+          $.get('/mydef/'+ term, function handler(data){
+            alert(data);
+          });
+          });
+        })
+       }
       });
-    }
-  })
+
+
+
+
 </script>
 
   </body>
