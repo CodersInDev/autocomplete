@@ -5,6 +5,14 @@
   </head>
   <body>
     <div id='main'>
+
+      <header>
+     <ul id="nav">
+        <li><a href="#" id='searchlistTag'>Search</a></li>
+        <li><a href="#" id='playlistTag'>Playlist</a></li>
+    </ul>
+</header>
+
       <h1>Search your words!</h1>
       <input type='text' id='search'> </input>
       <div id='results'> </div>
@@ -36,7 +44,7 @@ body {
 test('Search for words beginning with awes', function(assert){
   var done = assert.async();
   $.get('/find/awes', function handler(data) {
-    console.log(data);
+    //console.log(data);
     var words = data.split(',');
     assert.equal(words.length, 4, 'number of suggestions for awes is 4');
   });
@@ -50,7 +58,7 @@ test('Search for words beginning with awes', function(assert){
     var word = $('#search').val();
     if (word.length > 2) {
       $.get('/find/'+word, function handler(data) {
-        console.log(data);
+        console.log(data.length);
         var words = data.split(',');
         var results = '';
         for(var i=0; i < words.length; i++) {
