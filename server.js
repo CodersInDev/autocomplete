@@ -25,6 +25,9 @@ http.createServer(function handler(request, response) {
     });
     // response.end('word: ', word);
   }
+  if (url.indexOf('/define/') > -1) {
+    var word = url.split('/')[2];
+  }
   else {
     response.end('hello Dan!');
   }

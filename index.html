@@ -8,6 +8,7 @@
       <h1>Search your words!</h1>
       <input type='text' id='search'> </input>
       <div id='results'> </div>
+      <div id='definition'></div>
     </div>
 
     <style>
@@ -39,27 +40,72 @@ test('Search for words beginning with awes', function(assert){
     console.log(data);
     var words = data.split(',');
     assert.equal(words.length, 4, 'number of suggestions for awes is 4');
+    done();
   });
 });
+
+
+
+test('Define returns a definition from Wiktionary', function (assert) {
+  var done = assert.async();
+  var baseURL = "http://en.wiktionary.org";
+  $('#search').change(function () {
+    var wordInfo = this.value;
+    $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordInfo, function json (data) {
+      assert.notEqual(data, '', 'Define is connecting to Wiktionary API');
+      done();
+    });
+  });
+});
+
+
 
     </script>
 
 
 <script>
+  function showWiki (wordToDefine, text) {
+    var sourceURL = "http://en.wiktionary.org/wiki/" + wordToDefine;
+    $('#search').text(wordToDefine);
+    $('#definition').html(text);
+    $('#definition').find('a:not(.references a):not(.extiw):not([href^="#"])').attr('href', function() {
+      return baseURL + $(this).attr('href');
+    });
+    console.log(wordToDefine);
+    // console.log(text.length);
+  }
+
+
   $('#search').keyup(function(e) {
     var word = $('#search').val();
     if (word.length > 2) {
       $.get('/find/'+word, function handler(data) {
-        console.log(data);
         var words = data.split(',');
         var results = '';
         for(var i=0; i < words.length; i++) {
           results += "<p> " + words[i] + "</p>";
         }
         $('#results').html(results);
+        $('#results > p').click(function(e) {
+          var baseURL = "http://en.wiktionary.org";
+          var wordToDefine = $(this).html();
+          // console.log(wordToDefine);
+          $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordToDefine, function json (json) {
+            // if (json.parse.revid > 0) {
+              showWiki(wordToDefine, json.parse.text['*']['.mw-headline']);
+              console.log(json.parse.text['*']['.mw-headline'])
+            // }
+            // else {
+            //   $('#definition').html('Word not found');
+            // }
+          });
+        });
       });
     }
   })
+
+
+
 </script>
 
   </body>
