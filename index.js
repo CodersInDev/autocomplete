@@ -80,9 +80,10 @@ ac.findWord = function (word, callback) {
 ac.define = function (word, callback){
   var wordDef;
   var body = '';
-  var url = 'http://en.wiktionary.org//w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word;
+  var url = 'http://en.wiktionary.org/w/api.php?action=query&titles=' + word +'&prop=revisions&rvprop=content&rvgeneratexml=&format=json';
   var request = http.get(url, function (response){
     response.on('data', function(chunk){
+      // var miniChunk = chunk[]
       body+=chunk;
       console.log(body);
     });
