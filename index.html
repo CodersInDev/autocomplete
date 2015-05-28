@@ -92,8 +92,8 @@ test('Define returns a definition from Wiktionary', function (assert) {
           // console.log(wordToDefine);
           $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordToDefine, function json (json) {
             // if (json.parse.revid > 0) {
-              showWiki(wordToDefine, json.parse.text['*']['.mw-headline']);
-              console.log(json.parse.text['*']['.mw-headline'])
+              showWiki(wordToDefine, json.parse.text['*']);
+              console.log(json.parse.text['*'])
             // }
             // else {
             //   $('#definition').html('Word not found');
