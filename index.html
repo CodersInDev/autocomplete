@@ -4,14 +4,13 @@
     <title>Autocomplete Word Lookup like a Boss!</title>
   </head>
   <body>
-    <div id='main'>
 
-      <header>
-     <ul id="nav">
+    <header>
+      <ul id="nav">
         <li><a href="#">Search</a></li>
         <li><a href="#">Stats</a></li>
-    </ul>
-</header>
+      </ul>
+    </header>
 
       <h1>Search your words!</h1>
       <input type='text' id='search'> </input>
@@ -25,28 +24,24 @@
         </ul>
       </div>
 
+      <style>
+        body {
+          min-height: 100%;
+          height: 100%
+        }
+        #main {
+          height: 30%;
+        }
+        #quint {
+          height: 70%;
+          bottom: 0;
+          position: fixed;
+        }
 
-    </div>
-
-    <style>
-
-body {
-  min-height: 100%;
-  height: 100%
-}
-#main {
-  height: 30%;
-}
-#quint {
-  height: 70%;
-  bottom: 0;
-  position: fixed;
-}
-
-.resultItem{
-  cursor: pointer;
-}
-    </style>
+        .resultItem{
+          cursor: pointer;
+        }
+      </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
@@ -54,10 +49,7 @@ body {
     <div id="qunit-fixture"></div>
     <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
 
-    <script>
-
-
-
+<script>
 test('Search for ddd beginning with awes', function(assert){
   var done = assert.async();
   $.get('/find/awes', function handler(data) {
@@ -109,11 +101,10 @@ test("Clicking on a word increases # of times it's been searched for in the stat
 // test("clicking on stats tab switches to stats tab", function(){
 
 // });
-
-    </script>
-
+</script>
 
 <script>
+  //search event
   $('#search').keyup(function(e) {
     var word = $('#search').val();
     if (word.length > 2) {
@@ -129,28 +120,28 @@ test("Clicking on a word increases # of times it's been searched for in the stat
           }
           $('#results').html(results);
         }
-        $('.resultItem').click(function(e){
-          var term = e.target.innerHTML;
-          $.get('/stat/'+ term, function handler(data){
-            var wordStat = JSON.parse(data);
-            var myArray = wordStat[term];
-            var results = '';
-            for(var i=0; i < myArray.length; i++) {
-              results += "<li class='resultStat'>" + myArray[i] + "</li>"
-            }
-            $('#stats').html(results);
-          });
-
-          $.get('/mydef/'+ term, function handler(data){
-            alert(data);
-          });
-          });
-        })
-       }
+      })// end of the search event
+      }else{
+        $('#results').html("");//empty the list search is deleted
+      }
       });
 
 
+      $("#results").click(function(e){
+        var term = e.target.innerHTML;
+        $.get('/stat/'+ term, function handler(data){
+          var wordStat = JSON.parse(data);
+          var myArray = wordStat[term];
+          var results = '';
 
+          for(var i=0; i < myArray.length; i++) {
+            results += "<li class='resultStat'>" + myArray[i] + "</li>"
+          }
+
+          $('#stats').html(results);
+        });
+
+      })
 
 </script>
 

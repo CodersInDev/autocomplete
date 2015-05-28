@@ -19,9 +19,6 @@ ac.import = function (callback) {
 
 
 ac.stats = function (word, callback) {
-  // if (!ac.searches) {
-  //   ac.searches = {};
-  // }
   if (!ac.searches[word]) {
     ac.searches[word] = [];
   }

@@ -39,8 +39,6 @@ http.createServer(function handler(request, response) {
     ac.definition(word, function (err, data){
       response.end(data);
     });
-
-
   }
   // else{
   //   response.end('hello Dan!');
