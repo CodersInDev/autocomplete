@@ -8,6 +8,7 @@
       <h1>Search your words!</h1>
       <input type='text' id='search'> </input>
       <div id='results'> </div>
+      <div id='definition'></div>
     </div>
 
     <style>
@@ -24,6 +25,7 @@ body {
   bottom: 0;
   position: fixed;
 }
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
@@ -39,7 +41,20 @@ test('Search for words beginning with awes', function(assert){
     console.log(data);
     var words = data.split(',');
     assert.equal(words.length, 4, 'number of suggestions for awes is 4');
+    done();
   });
+});
+
+
+test("check that the Wiktionary is returning content", function(assert) {
+  var done = assert.async();
+  document.getElementById('search').value = "awesome";
+  $( "#search" ).trigger( "click" );
+    setTimeout(function() {
+      console.log('hi');
+      assert.notEqual(document.getElementById('definition').innerHTML, "");
+      done();
+    }, 1000);
 });
 
     </script>
@@ -50,7 +65,7 @@ test('Search for words beginning with awes', function(assert){
     var word = $('#search').val();
     if (word.length > 2) {
       $.get('/find/'+word, function handler(data) {
-        console.log(data);
+        console.log(data.length);
         var words = data.split(',');
         var results = '';
         for(var i=0; i < words.length; i++) {
@@ -60,6 +75,20 @@ test('Search for words beginning with awes', function(assert){
       });
     }
   })
+
+
+
+var baseURL = 'http://en.wiktionary.org';
+var word = $('#search').val();
+$.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
+      if(json.parse.revid > 0) {
+        showPage(page,json.parse.text['*']);
+      } else {
+        $('#definition').html('word not found');
+      }
+    });
+
+
 </script>
 
   </body>
