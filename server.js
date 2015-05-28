@@ -34,9 +34,9 @@ http.createServer(function handler(request, response) {
     })
   }
 
-  if(url.indexOf('/mydef/') > -1){
+  if(url.indexOf('/define/') > -1){
     var word = url.split('/')[2];
-    ac.definition(word, function (err, data){
+    ac.define(word, function (err, data){
       response.end(data);
     });
 
