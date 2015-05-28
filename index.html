@@ -104,13 +104,14 @@ test('Define returns a definition from Wiktionary', function (assert) {
         }
         $('#results').html(results);
         $('#results > p').click(function(e) {
-          var baseURL = "http://en.wiktionary.org";
+          var baseURL = "http://en.wiktionary.org/";
           var wordToDefine = $(this).html();
           // console.log(wordToDefine);
           $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordToDefine, function json (json) {
             // if (json.parse.revid > 0) {
-              showWiki(wordToDefine, json.parse.text['*']);
-              console.log(json.parse.text['*'])
+              console.log(wordToDefine);
+              showWiki(wordToDefine, json);
+              console.log(json)
             // }
             // else {
             //   $('#definition').html('Word not found');
