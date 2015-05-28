@@ -46,47 +46,94 @@ test('Search for words beginning with awes', function(assert){
 });
 
 
-test("check that the Wiktionary is returning content", function(assert) {
+
+// test("check that the Wiktionary is returning content", function(assert) {
+//   var done = assert.async();
+//   document.getElementById('search').value = "awesome";
+//   $( "#search" ).trigger( "click" );
+//     setTimeout(function() {
+//       console.log('hi');
+//       assert.notEqual(document.getElementById('definition').innerHTML, "");
+//       done();
+//     }, 1000);
+// });
+
+
+
+test('Define returns a definition from Wiktionary', function (assert) {
   var done = assert.async();
-  document.getElementById('search').value = "awesome";
-  $( "#search" ).trigger( "click" );
-    setTimeout(function() {
-      console.log('hi');
-      assert.notEqual(document.getElementById('definition').innerHTML, "");
+  var baseURL = "http://en.wiktionary.org";
+  $('#search').change(function () {
+    var wordInfo = this.value;
+    $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordInfo, function json (data) {
+      assert.notEqual(data, '', 'Define is connecting to Wiktionary API');
       done();
-    }, 1000);
+    });
+  });
 });
+
+
+
 
     </script>
 
 
 <script>
+  function showWiki (wordToDefine, text) {
+    var sourceURL = "http://en.wiktionary.org/wiki/" + wordToDefine;
+    $('#search').text(wordToDefine);
+    $('#definition').html(text);
+    $('#definition').find('a:not(.references a):not(.extiw):not([href^="#"])').attr('href', function() {
+      return baseURL + $(this).attr('href');
+    });
+    console.log(wordToDefine);
+    // console.log(text.length);
+  }
+
+
   $('#search').keyup(function(e) {
     var word = $('#search').val();
     if (word.length > 2) {
       $.get('/find/'+word, function handler(data) {
-        console.log(data.length);
+
+
         var words = data.split(',');
         var results = '';
         for(var i=0; i < words.length; i++) {
           results += "<p> " + words[i] + "</p>";
         }
         $('#results').html(results);
+        $('#results > p').click(function(e) {
+          var baseURL = "http://en.wiktionary.org";
+          var wordToDefine = $(this).html();
+          // console.log(wordToDefine);
+          $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordToDefine, function json (json) {
+            // if (json.parse.revid > 0) {
+              showWiki(wordToDefine, json.parse.text['*']['.mw-headline']);
+              console.log(json.parse.text['*']['.mw-headline'])
+            // }
+            // else {
+            //   $('#definition').html('Word not found');
+            // }
+          });
+        });
       });
     }
   })
 
 
 
-var baseURL = 'http://en.wiktionary.org';
-var word = $('#search').val();
-$.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
-      if(json.parse.revid > 0) {
-        showPage(page,json.parse.text['*']);
-      } else {
-        $('#definition').html('word not found');
-      }
-    });
+
+// var baseURL = 'http://en.wiktionary.org';
+// var word = $('#search').val();
+// $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
+//       if(json.parse.revid > 0) {
+//         showPage(page,json.parse.text['*']);
+//       } else {
+//         $('#definition').html('word not found');
+//       }
+//     });
+
 
 
 </script>
