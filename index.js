@@ -37,7 +37,7 @@ ac.findWord = function (word, callback) {
   return callback(null, found);
 }
 
-ac.definition = function (word, callback) {
+ac.define = function (word, callback) {
   //call the api here
   var def = "This is the definition for the word: " + word;
   return callback(null, def);
