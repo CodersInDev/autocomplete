@@ -26,7 +26,13 @@ http.createServer(function handler(request, response) {
     // response.end('word: ', word);
   }
   if (url.indexOf('/define/') > -1) {
+    console.log('i received your request and i am gonna ask ac.define to get me information');
     var word = url.split('/')[2];
+    ac.define(word, function(err, definition) {
+      console.log('*************************' + definition.toString());
+      response.end(definition.toString());
+      // console.log(definition.toString());
+    });
   }
   else {
     response.end('hello Dan!');
