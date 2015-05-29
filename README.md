@@ -10,7 +10,7 @@ Week 3 of learning to code in 8 weeks - the full stack. This exercise is our fir
 
 ## What?
 
-A search bar which autocompletes based on the wiktionary list of english words, with an infobox containing definitions, search stats, relevant tweets, and maybe something else.
+A search bar which autocompletes based on the wiktionary list of english words, with an infobox soon to be containing definitions, search stats, relevant tweets, and maybe something else.
 
 
 ## How?
