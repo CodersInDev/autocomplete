@@ -29,7 +29,7 @@ ac.stats = function (word, callback) {
 ac.findWord = function (word, callback) {
   var found = [];
   for (var i = 0; i < ac.words.length; i++) {
-    if (ac.words[i].search(word.toLowerCase()) !== -1) {
+    if (ac.words[i].toLowerCase().indexOf(word.toLowerCase()) !== -1) {
       found.push(ac.words[i]);
     }
   }
