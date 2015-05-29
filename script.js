@@ -6,11 +6,14 @@ $('#search').keyup(function(e) {
       if(data === "") {
         $('#results').html("Nothing matched your search term");
       } else {
+        console.log(data);
         var words = data.split(',');
         var results = '';
+        console.log(words);
         for(var i=0; i < words.length; i++) {
           results += "<li class='resultItem'>" + words[i] + "</li>"
         }
+        console.log(results);
         $('#results').html(results);
       }
     });

@@ -33,7 +33,11 @@ ac.findWord = function (word, callback) {
       found.push(ac.words[i]);
     }
   }
-  var found2 = stringSort(found, word);
+  console.log('############');
+  console.log(found);
+  console.log('############');
+  var found2 = stringSort(found, word.toLowerCase());
+  console.log(found2);
   return callback(null, found2);
 }
 
@@ -68,8 +72,10 @@ function stringSort(inputArray, term){
       }
   }
 
-  defeatedArray.push(inputArray.slice(searchFirst,searchLast + 1), inputArray.slice(0, searchFirst), inputArray.slice(searchLast + 1))
-
+  // defeatedArray.push(inputArray.slice(searchFirst,searchLast + 1)).push(), inputArray.slice(0, searchFirst), inputArray.slice(searchLast + 1))
+  defeatedArray.push(inputArray.slice(searchFirst,searchLast + 1), inputArray.slice(0, searchFirst), inputArray.slice(searchLast + 1));
+  defeatedArray = defeatedArray.reduce(function (a,b) {
+    return a.concat(b);
+  });
   return defeatedArray;
-
 }
