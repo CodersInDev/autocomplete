@@ -103,7 +103,7 @@ test('Define returns a definition from Wiktionary', function (assert) {
             console.log(typeof parseTree);
             console.log('******************' + parseTree);
           
-            var definition = /#(.*?)#/.exec(parseTree)[1];
+            var definition = /#(.*?)#/.exec(parseTree);
             
             console.log('Definition ' + definition);
             console.log(typeof definition);
