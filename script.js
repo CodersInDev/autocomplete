@@ -13,43 +13,37 @@ $('#search').keyup(function(e) {
         }
         $('#results').html(results);
       }
-// <<<<<<< HEAD
-//       })// end of the search event
-//       }else{
-//         $('#results').html("");//empty the list search is deleted
-//       }
-//       });
-// =======
-
-      $('.resultItem').click(function(e){
-        var term = e.target.innerHTML;
-
-        $.get('/stat/'+ term, function handler(data){
-          var wordStat = JSON.parse(data);
-          var myArray = wordStat[term];
-          var results = '';
-          for(var i=0; i < myArray.length; i++) {
-            results += "<li class='resultStat'>" + myArray[i] + "</li>"
-          }
-          $('#stats').html(results);
-        });
-
-        $.get('/define/'+ term, function handler(data){
-          $("#wordDef").html(data);
-        });
-
-
-        $("#defWrap").show()
-
-      });
-    })
+    });
+  }else{
+        $('#results').html("");//empty the list search is deleted
   }
 });
+
+$('#results').click(function(e){
+  var term = e.target.innerHTML;
+  $("#defWrap").show(300);
+  $.get('/stat/'+ term, function handler(data){
+    var wordStat = JSON.parse(data);
+    var myArray = wordStat[term];
+    var results = '';
+    for(var i=0; i < myArray.length; i++) {
+      results += "<li class='resultStat'>" + myArray[i] + "</li>"
+    }
+
+    $('#stats').html(results);
+
+    $.get('/define/'+ term, function handler(data){
+      $("#wordDef").html(data);
+    });
+  });
+});
+
+
 
 
 //hide defWrap
 $("#closeDefWrap").click(function(){
-   $("#defWrap").hide()
+   $("#defWrap").hide(300);
 })
 
 
