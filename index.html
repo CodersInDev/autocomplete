@@ -12,7 +12,6 @@
     </div>
 
     <style>
-
 body {
   min-height: 100%;
   height: 100%
@@ -25,7 +24,6 @@ body {
   bottom: 0;
   position: fixed;
 }
-
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
@@ -34,7 +32,6 @@ body {
     <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
 
     <script>
-
 test('Search for words beginning with awes', function(assert){
   var done = assert.async();
   $.get('/find/awes', function handler(data) {
@@ -44,9 +41,6 @@ test('Search for words beginning with awes', function(assert){
     done();
   });
 });
-
-
-
 // test("check that the Wiktionary is returning content", function(assert) {
 //   var done = assert.async();
 //   document.getElementById('search').value = "awesome";
@@ -57,9 +51,6 @@ test('Search for words beginning with awes', function(assert){
 //       done();
 //     }, 1000);
 // });
-
-
-
 test('Define returns a definition from Wiktionary', function (assert) {
   var done = assert.async();
   var baseURL = "http://en.wiktionary.org";
@@ -71,15 +62,12 @@ test('Define returns a definition from Wiktionary', function (assert) {
     });
   });
 });
-
-
-
-
     </script>
 
 
 <script>
   function showWiki (wordToDefine, text) {
+    var baseURL = "http://en.wiktionary.org";
     var sourceURL = "http://en.wiktionary.org/wiki/" + wordToDefine;
     $('#search').text(wordToDefine);
     $('#definition').html(text);
@@ -89,14 +77,10 @@ test('Define returns a definition from Wiktionary', function (assert) {
     console.log(wordToDefine);
     // console.log(text.length);
   }
-
-
   $('#search').keyup(function(e) {
     var word = $('#search').val();
     if (word.length > 2) {
       $.get('/find/'+word, function handler(data) {
-
-
         var words = data.split(',');
         var results = '';
         for(var i=0; i < words.length; i++) {
@@ -104,14 +88,15 @@ test('Define returns a definition from Wiktionary', function (assert) {
         }
         $('#results').html(results);
         $('#results > p').click(function(e) {
-          var baseURL = "http://en.wiktionary.org/";
+          var baseURL = "http://en.wiktionary.org";
           var wordToDefine = $(this).html();
           // console.log(wordToDefine);
-          $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordToDefine, function json (json) {
+          // http://en.wiktionary.org/w/api.php?format=json&action=query&rvprop=content&prop=revisions&redirects=1&titles'+word
+          // http://en.wiktionary.org/w/api.php?action=query&titles=&prop=revisions&rvprop=content&rvgeneratexml=&format=json'+word
+          $.getJSON('http://en.wiktionary.org/w/api.php?action=query&titles=' + wordToDefine + '&prop=revisions&rvprop=content&rvgeneratexml=&format=json', function json (json) {
             // if (json.parse.revid > 0) {
-              console.log(wordToDefine);
-              showWiki(wordToDefine, json);
-              console.log(json)
+              showWiki(wordToDefine, json.parse.text['*']);
+              console.log(json.parse.text['*'])
             // }
             // else {
             //   $('#definition').html('Word not found');
@@ -121,10 +106,6 @@ test('Define returns a definition from Wiktionary', function (assert) {
       });
     }
   })
-
-
-
-
 // var baseURL = 'http://en.wiktionary.org';
 // var word = $('#search').val();
 // $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
@@ -134,9 +115,6 @@ test('Define returns a definition from Wiktionary', function (assert) {
 //         $('#definition').html('word not found');
 //       }
 //     });
-
-
-
 </script>
 
   </body>
