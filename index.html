@@ -6,9 +6,10 @@
   <body>
     <div id='main'>
       <h1>Search your words!</h1>
+      <div id='definition'></div>
       <input type='text' id='search'> </input>
       <div id='results'> </div>
-      <div id='definition'></div>
+      
     </div>
 
     <style>
@@ -88,24 +89,30 @@ test('Define returns a definition from Wiktionary', function (assert) {
         }
         $('#results').html(results);
         $('#results > p').click(function(e) {
-          var baseURL = "http://en.wiktionary.org";
           var wordToDefine = $(this).html();
-          // console.log(wordToDefine);
-          // http://en.wiktionary.org/w/api.php?format=json&action=query&rvprop=content&prop=revisions&redirects=1&titles'+word
-          // http://en.wiktionary.org/w/api.php?action=query&titles=&prop=revisions&rvprop=content&rvgeneratexml=&format=json'+word
-          $.getJSON('http://en.wiktionary.org/w/api.php?action=query&titles=' + wordToDefine + '&prop=revisions&rvprop=content&rvgeneratexml=&format=json', function json (json) {
-            // if (json.parse.revid > 0) {
-              showWiki(wordToDefine, json.parse.text['*']);
-              console.log(json.parse.text['*'])
+          console.log(wordToDefine);
+          console.log('ask server to get definition from wiktionary');
+          $.get('/define/' + wordToDefine, function handler(json) {
+            console.log('i am showing data');
+            console.log(json);
+            document.getElementById('definition').innerHTML = json;
+            // if(json.parse.revid > 0) {
+            //   showWiki(page,json.parse.text['*']);
             // }
-            // else {
-            //   $('#definition').html('Word not found');
-            // }
-          });
+            // } else {
+            //   $('#definition').html('word not found');
+
+            //     }
+
         });
       });
-    }
-  })
+    });
+  }
+});
+
+
+
+
 // var baseURL = 'http://en.wiktionary.org';
 // var word = $('#search').val();
 // $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
