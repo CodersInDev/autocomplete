@@ -35,10 +35,37 @@ $('#results').click(function(e){
 
     $('#stats').html("The number of times that " + term + " has been searched for is: " + myArray.length);
 
-    $.get('/define/'+ term, function handler(data){
-      $("#wordDef").html(data);
+    $.get('/define/' + term, function handler(json) {
+            console.log('i am showing data');
+            // console.log(json);
+
+            var ourJson = JSON.parse(json);
+            var wordIdNumber = ourJson.query.pages;
+
+            var parseTree = wordIdNumber[Object.keys(wordIdNumber)[0]].revisions[0].parsetree;
+            console.log(typeof parseTree);
+            
+            //definition starts from first # 
+            var firstHash = parseTree.indexOf('#');
+            // var ind = parseTree.substr(0, firstHash); 
+
+            var text = parseTree.substr(firstHash + 1);
+
+            //definition finish on first fullstop after hash
+            var endChar = text.indexOf('.');
+            var secondPartText = text.substr(0, endChar + 1);
+
+            var noBrackets = secondPartText.replace(/[\[\]']+/g,'');
+
+            // var definition = /#(.*?)#/.exec(parseTree)[1];
+
+            
+            // console.log('Definition ' + definition);
+            // console.log(typeof definition);
+            document.getElementById('wordDef').innerHTML = noBrackets;
     });
 
+      
 
   });
 });

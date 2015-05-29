@@ -35,7 +35,6 @@ http.createServer(function handler(request, response) {
           response.end(found.join(','));
         });
         break;
-
       case 'stat':
         ac.stats(word, function (err, data){
           response.end(JSON.stringify(data));
@@ -44,7 +43,7 @@ http.createServer(function handler(request, response) {
 
       case 'define':
         ac.define(word, function (err, data){
-          response.end(data);
+          response.end(data.toString());
         });
         break;
 

@@ -43,3 +43,16 @@ test("Clicking on a word increases # of times it's been searched for in the stat
 // test("clicking on a word brings up an info", function(){
 
 // });
+
+
+test('Define returns a definition from Wiktionary', function (assert) {
+  var done = assert.async();
+  var baseURL = "http://en.wiktionary.org";
+  $('#search').change(function () {
+    var wordInfo = this.value;
+    $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordInfo, function json (data) {
+      assert.notEqual(data, '', 'Define is connecting to Wiktionary API');
+      done();
+    });
+  });
+});

@@ -1,5 +1,6 @@
 var fs = require('fs');
 var ac = {searches: {}};
+var http = require('http');
 
 ac.import = function (callback) {
   if (!callback || typeof callback !== 'function') {
@@ -41,13 +42,24 @@ ac.findWord = function (word, callback) {
   return callback(null, found2);
 }
 
-ac.define = function (word, callback) {
-  //call the api here
-  var def = "This is the definition for the word: " + word;
-  return callback(null, def);
+ac.define = function (word, callback){
+  var wordDef;
+  var body = '';
+  var url = 'http://en.wiktionary.org/w/api.php?action=query&titles=' + word +'&prop=revisions&rvprop=content&rvgeneratexml=&format=json';
+  var request = http.get(url, function (response){
+    response.on('data', function(chunk){
+    body+=chunk;
+    console.log(body);
+    });
+    response.on('end', function(){
+      if(response.statusCode === 200){
+        wordDef = body;
+        console.log(wordDef);
+        return callback(null, wordDef);
+      }
+    })
+  });
 }
-
-
 
 module.exports = ac;
 
