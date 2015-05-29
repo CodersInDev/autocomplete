@@ -1,69 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Autocomplete Word Lookup like a Boss!</title>
-    <link rel='stylesheet' href='style.css'>
-  </head>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Autocomplete Word Lookup like a Boss!</title>
+  <link rel='stylesheet' href='style.css'>
+</head>
 
-  <body>
-      <div id="searchContent">
+<body>
 
-        <div id="searchBar">
-          <h1>Search your words!</h1>
-            <input type='text' id='search'></input>
-        </div>
+    <div id="searchBar">
+      <h1>Search your words!</h1>
+      <input type='text' id='search'></input>
+    </div>
 
-        <div>
-          <ul id='results'>
-          </ul>
-        </div>
+    <div id="listWords">
+      <ul id='results'>
+      </ul>
+    </div>
 
-        <div id="defWrap">
-          <div id="defBox">
-
-            <div class="square">
-              <span>Definition from Wiktionary</span>
-              <p id="wordDef"></p>
-            </div>
-
-            <div class="square">
-              <span>Search stats for: </span>
-            </div>
-
-            <div class="linebreak" />
-
-            <div class="square">
-              <span>Latest tweet matching your search term</span>
-            </div>
-
-            <div class="square">
-              <span>Another cool thing</span>
-            </div>
-
-            <div class="linebreak" />
-
-            <div><input id="closeDefWrap" type="button" value="Close definition and return to search"></div>
+    <div id="defWrap">
+      <div id="defBox">
+        <a class="closeDefWrap" id="closeDefWrap"></a>
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Definition from Wiktionary</span>
+            <p id="wordDef"></p>
           </div>
         </div>
 
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Search stats for: </span>
+          </div>
+        </div>
 
+        <div class="linebreak"></div>
+
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Latest tweet matching your search term</span>
+          </div>
+        </div>
+
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Another cool thing</span>
+          </div>
+        </div>
+
+        <div class="linebreak"></div>
+        <!-- <div><input id="closeDefWrap" type="button" value="Close definition and return to search"></div> -->
       </div>
-
-      <div>
-        <ul id='stats'>
-        </ul>
-      </div>
-
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css"> -->
-    <!-- <div id="qunit"></div> -->
-    <!-- <div id="qunit-fixture"></div> -->
-    <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
-    <script src="script.js"></script>
-    <!-- <script src='test.js'></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css"> -->
+<!-- <div id="qunit"></div> -->
+<!-- <div id="qunit-fixture"></div> -->
+<script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
+<script src="script.js"></script>
+<!-- <script src='test.js'></script> -->
 
-  </body>
+</body>
 </html>

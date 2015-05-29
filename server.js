@@ -3,8 +3,6 @@ var http = require('http'),
     ac = require('./index.js'),
     fs = require('fs'),
     index = fs.readFileSync(__dirname + '/index.html'),
-    endpoints = ['find','stat','define'],
-    url,
     action,
     word;
 
@@ -22,7 +20,7 @@ function getUrlWord(url){
 }
 
 http.createServer(function handler(request, response) {
-  url = request.url;
+  var url = request.url;
   getUrlAction(url);
   console.log("request.url:", url);
   if (url.length === 1) {
@@ -57,6 +55,7 @@ http.createServer(function handler(request, response) {
                 response.end("Can't load the ressource!");
             } else {
                 var ext = url.split('.')[1];
+                console.log("this is the extension: " + ext);
                 response.writeHead(200, {'Content-Type' : 'text/' + ext});
                 response.end(data);
             }
