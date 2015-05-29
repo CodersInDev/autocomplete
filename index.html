@@ -119,12 +119,20 @@ test('Define returns a definition from Wiktionary', function (assert) {
             var parseTree = wordIdNumber[Object.keys(wordIdNumber)[0]].revisions[0].parsetree;
             console.log(typeof parseTree);
             console.log('******************' + parseTree);
-          
-            var definition = /#(.*?)#/.exec(parseTree)[1];
+            
+            // var part = parseTree.indexOf('#');
+            var firstHash = parseTree.indexOf('#');
+            var id = parseTree.substr(0, firstHash); // Gets the first part
+            var text = parseTree.substr(firstHash + 1);
+
+            var anotherHash = text.indexOf('#');
+            var firstPart = text.substr(0, anotherHash);
+            
+            // var definition = /#(.*?)#/.exec(parseTree)[1];
             
             console.log('Definition ' + definition);
             console.log(typeof definition);
-            document.getElementById('definition').innerHTML = definition;
+            document.getElementById('definition').innerHTML = firstPart;
             // if(json.parse.revid > 0) {
             //   showWiki(page,json.parse.text['*']);
             // }
