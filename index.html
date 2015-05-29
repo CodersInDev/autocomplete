@@ -27,10 +27,10 @@ body {
 }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!--<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
-    <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>-->
+    <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
 
     <script>
 test('Search for words beginning with awes', function(assert){
@@ -101,32 +101,26 @@ test('Define returns a definition from Wiktionary', function (assert) {
 
             var parseTree = wordIdNumber[Object.keys(wordIdNumber)[0]].revisions[0].parsetree;
             console.log(typeof parseTree);
-            console.log('******************' + parseTree);
-          
-            // var definition = /#(.*?)#/.exec(parseTree);
-
             
-            // var part = parseTree.indexOf('#');
+            //definition starts from first # 
             var firstHash = parseTree.indexOf('#');
-            var id = parseTree.substr(0, firstHash); // Gets the first part
+            // var ind = parseTree.substr(0, firstHash); 
+
             var text = parseTree.substr(firstHash + 1);
 
-            var anotherHash = text.indexOf('#');
-            var firstPart = text.substr(0, anotherHash);
-            
+            //definition finish on first fullstop after hash
+            var endChar = text.indexOf('.');
+            var secondPartText = text.substr(0, endChar + 1);
+
+            var noBrackets = secondPartText.replace(/[\[\]']+/g,'');
+
             // var definition = /#(.*?)#/.exec(parseTree)[1];
 
             
-            console.log('Definition ' + definition);
-            console.log(typeof definition);
-            document.getElementById('definition').innerHTML = firstPart;
-            // if(json.parse.revid > 0) {
-            //   showWiki(page,json.parse.text['*']);
-            // }
-            // } else {
-            //   $('#definition').html('word not found');
-
-            //     }
+            // console.log('Definition ' + definition);
+            // console.log(typeof definition);
+            document.getElementById('definition').innerHTML = noBrackets;
+          
 
         });
       });
@@ -134,18 +128,6 @@ test('Define returns a definition from Wiktionary', function (assert) {
   }
 });
 
-
-
-
-// var baseURL = 'http://en.wiktionary.org';
-// var word = $('#search').val();
-// $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page=' + word, function(json) {
-//       if(json.parse.revid > 0) {
-//         showPage(page,json.parse.text['*']);
-//       } else {
-//         $('#definition').html('word not found');
-//       }
-//     });
 </script>
 
   </body>
