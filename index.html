@@ -1,134 +1,67 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Autocomplete Word Lookup like a Boss!</title>
-  </head>
-  <body>
-    <div id='main'>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Autocomplete Word Lookup like a Boss!</title>
+  <link rel='stylesheet' href='style.css'>
+</head>
+
+<body>
+
+    <div id="searchBar">
       <h1>Search your words!</h1>
-      <div id='definition'></div>
-      <input type='text' id='search'> </input>
-      <div id='results'> </div>
-      
+      <input type='text' id='search'></input>
     </div>
 
-    <style>
-body {
-  min-height: 100%;
-  height: 100%
-}
-#main {
-  height: 30%;
-}
-#quint {
-  height: 70%;
-  bottom: 0;
-  position: fixed;
-}
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css">
-    <div id="qunit"></div>
-    <div id="qunit-fixture"></div>
-    <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
+    <div id="listWords">
+      <ul id='results'>
+      </ul>
+    </div>
 
-    <script>
-test('Search for words beginning with awes', function(assert){
-  var done = assert.async();
-  $.get('/find/awes', function handler(data) {
-    console.log(data);
-    var words = data.split(',');
-    assert.equal(words.length, 4, 'number of suggestions for awes is 4');
-    done();
-  });
-});
-// test("check that the Wiktionary is returning content", function(assert) {
-//   var done = assert.async();
-//   document.getElementById('search').value = "awesome";
-//   $( "#search" ).trigger( "click" );
-//     setTimeout(function() {
-//       console.log('hi');
-//       assert.notEqual(document.getElementById('definition').innerHTML, "");
-//       done();
-//     }, 1000);
-// });
-test('Define returns a definition from Wiktionary', function (assert) {
-  var done = assert.async();
-  var baseURL = "http://en.wiktionary.org";
-  $('#search').change(function () {
-    var wordInfo = this.value;
-    $.getJSON(baseURL+'/w/api.php?action=parse&format=json&prop=text|revid|displaytitle&callback=?&page='+wordInfo, function json (data) {
-      assert.notEqual(data, '', 'Define is connecting to Wiktionary API');
-      done();
-    });
-  });
-});
-    </script>
+    <div id="defWrap">
+      <div id="defBox">
+        <a class="closeDefWrap" id="closeDefWrap"></a>
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Definition from Wiktionary</span>
+            <p id="wordDef"></p>
+          </div>
+        </div>
+
+        <div class="square">
+          <div class='infoWrap'>
+              <span>Statistics</span>
+              <p id='stats'></p>
+          </div>
+        </div>
+
+        <div class="linebreak"></div>
+
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Latest tweet matching your search term</span>
+          </div>
+        </div>
+        <div class="square">
+          <div class='infoWrap'>
+            <span>Another cool thing</span>
+          </div>
+        </div>
+
+        <div class="linebreak"></div>
+        <!-- <div><input id="closeDefWrap" type="button" value="Close definition and return to search"></div> -->
+      </div>
+    </div>
 
 
-<script>
-  function showWiki (wordToDefine, text) {
-    var baseURL = "http://en.wiktionary.org";
-    var sourceURL = "http://en.wiktionary.org/wiki/" + wordToDefine;
-    $('#search').text(wordToDefine);
-    $('#definition').html(text);
-    $('#definition').find('a:not(.references a):not(.extiw):not([href^="#"])').attr('href', function() {
-      return baseURL + $(this).attr('href');
-    });
-    console.log(wordToDefine);
-    // console.log(text.length);
-  }
-  $('#search').keyup(function(e) {
-    var word = $('#search').val();
-    if (word.length > 2) {
-      $.get('/find/'+word, function handler(data) {
-        var words = data.split(',');
-        var results = '';
-        for(var i=0; i < words.length; i++) {
-          results += "<p> " + words[i] + "</p>";
-        }
-        $('#results').html(results);
-        $('#results > p').click(function(e) {
-          var wordToDefine = $(this).html();
-          console.log(wordToDefine);
-          console.log('ask server to get definition from wiktionary');
-          $.get('/define/' + wordToDefine, function handler(json) {
-            console.log('i am showing data');
-            // console.log(json);
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.18.0.css"> -->
+<!-- <div id="qunit"></div> -->
+<!-- <div id="qunit-fixture"></div> -->
+<script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
+<script src="script.js"></script>
+<!-- <script src='test.js'></script> -->
 
-            var ourJson = JSON.parse(json);
-            var wordIdNumber = ourJson.query.pages;
 
-            var parseTree = wordIdNumber[Object.keys(wordIdNumber)[0]].revisions[0].parsetree;
-            console.log(typeof parseTree);
-            
-            //definition starts from first # 
-            var firstHash = parseTree.indexOf('#');
-            // var ind = parseTree.substr(0, firstHash); 
-
-            var text = parseTree.substr(firstHash + 1);
-
-            //definition finish on first fullstop after hash
-            var endChar = text.indexOf('.');
-            var secondPartText = text.substr(0, endChar + 1);
-
-            var noBrackets = secondPartText.replace(/[\[\]']+/g,'');
-
-            // var definition = /#(.*?)#/.exec(parseTree)[1];
-
-            
-            // console.log('Definition ' + definition);
-            // console.log(typeof definition);
-            document.getElementById('definition').innerHTML = noBrackets;
-          
-
-        });
-      });
-    });
-  }
-});
-
-</script>
-
-  </body>
+</body>
 </html>

@@ -1,43 +1,65 @@
-var http = require('http');
-var port = process.env.PORT || 3000;
-var ac = require('./index.js');
+var http = require('http'),
+    port = process.env.PORT || 3000,
+    ac = require('./index.js'),
+    fs = require('fs'),
+    index = fs.readFileSync(__dirname + '/index.html'),
+    action,
+    word;
+
+//initialize the list of words
 ac.import(function(err, count) {
   console.log("imported a bunch of words! >> ", count.length);
 });
 
-var fs = require('fs');
-var index = fs.readFileSync(__dirname + '/index.html');
+function getUrlAction(url){
+  return url.split('/')[1];
+}
+
+function getUrlWord(url){
+  return url.split('/')[2];
+}
 
 http.createServer(function handler(request, response) {
   var url = request.url;
+  getUrlAction(url);
   console.log("request.url:", url);
   if (url.length === 1) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.end(index.toString());
-  }
-  if (url.indexOf('/find/') > -1) {
-    // locahost:3000/find/word
-    var word = url.split('/')[2];
-    // console.log(word);
-    ac.findWord(word, function (err, found){
-      // console.log(found);
-      response.end(found.join(','));
-    });
-    // response.end('word: ', word);
-  }
-  if (url.indexOf('/define/') > -1) {
-    console.log('i received your request and i am gonna ask ac.define to get me information');
-    var word = url.split('/')[2];
-    ac.define(word, function(err, definition) {
-      console.log('*************************' + definition.toString());
-      response.end(definition.toString());
-      // console.log(definition.toString());
-    });
-  }
-  else {
-    response.end('hello Dan!');
-  }
+  }else{
+    action = getUrlAction(url);
+    word = getUrlWord(url);
+    switch(action){
+      case 'find':
+        ac.findWord(word, function (err, found){
+          response.end(found.join(','));
+        });
+        break;
+      case 'stat':
+        ac.stats(word, function (err, data){
+          response.end(JSON.stringify(data));
+        })
+        break;
 
+      case 'define':
+        ac.define(word, function (err, data){
+          response.end(data.toString());
+        });
+        break;
+
+      default:
+        //try to load file
+        fs.readFile(__dirname + url, function(err, data){
+            if (err){
+                response.end("Can't load the ressource!");
+            } else {
+                var ext = url.split('.')[1];
+                console.log("this is the extension: " + ext);
+                response.writeHead(200, {'Content-Type' : 'text/' + ext});
+                response.end(data);
+            }
+        });
+      }
+    }
 }).listen(port);
-
 console.log('node http server listening on http://localhost:' + port);
