@@ -4,7 +4,7 @@ test('Search for word containing awes', function(assert){
   var done = assert.async();
   $.get('/find/awes', function handler(data) {
     var words = data.split(',');
-    assert.equal(words.length, 12, 'number of suggestions for awes is 4');
+    assert.equal(words.length, 4, 'number of suggestions for awes is 4');
     done();
   });
 });
@@ -43,4 +43,3 @@ test("Clicking on a word increases # of times it's been searched for in the stat
 // test("clicking on a word brings up an info", function(){
 
 // });
-

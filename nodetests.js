@@ -1,5 +1,5 @@
 var assert = require('assert');
-var ac = require('../index.js');
+var ac = require('./index.js');
 var testindex = 1; // see: https://testanything.org/tap-version-13-specification.html
 assert.equal(typeof ac, 'object');
 assert.equal(typeof ac.import, 'function');
@@ -35,3 +35,12 @@ ac.import(function () {
     });
   });
 });
+
+
+console.log('# ac.define tracks which words/string were define for');
+ac.import(function () {
+  ac.define('awesome', function (err, definition) {
+    // console.log(stats);
+    assert.equal(definition, "This is the definition for the word: awesome");
+    });
+  });
