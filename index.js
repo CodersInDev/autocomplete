@@ -25,7 +25,6 @@ ac.stats = function (word, callback) {
 }
 
 ac.findWord = function (word, callback) {
-  // who wants to volunteer to implement the method?
   var found = [];
   for (var i = 0; i < ac.words.length; i++) {
     if (ac.words[i].search(word) === 0) {
@@ -83,15 +82,13 @@ ac.define = function (word, callback){
   var url = 'http://en.wiktionary.org/w/api.php?action=query&titles=' + word +'&prop=revisions&rvprop=content&rvgeneratexml=&format=json';
   var request = http.get(url, function (response){
     response.on('data', function(chunk){
-      // var miniChunk = chunk[]
-      body+=chunk;
-      console.log(body);
+    body+=chunk;
+    console.log(body);
     });
     response.on('end', function(){
       if(response.statusCode === 200){
         wordDef = body;
-                  console.log(wordDef);
-
+        console.log(wordDef);
         return callback(null, wordDef);
       }
     })
