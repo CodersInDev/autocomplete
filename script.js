@@ -28,16 +28,18 @@ $('#results').click(function(e){
   $.get('/stat/'+ term, function handler(data){
     var wordStat = JSON.parse(data);
     var myArray = wordStat[term];
-    var results = '';
-    for(var i=0; i < myArray.length; i++) {
-      results += "<li class='resultStat'>" + myArray[i] + "</li>"
-    }
+    // var results = '';
+    // for(var i=0; i < myArray.length; i++) {
+    //   results += "<li class='resultStat'>" + myArray[i] + "</li>"
+    // }
 
-    $('#stats').html(results);
+    $('#stats').html("The number of times that " + term + " has been searched for is: " + myArray.length);
 
     $.get('/define/'+ term, function handler(data){
       $("#wordDef").html(data);
     });
+
+
   });
 });
 
