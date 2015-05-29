@@ -47,6 +47,6 @@ npm run nodemon
 
 + [x] serve an html page with a ***search box***
 + [x] expose the `ac.findWords` method as an API endpoint /find/:word
-+ [ ] display the ***definition*** of a word when the person clicks/taps (*or navigates using the keyboard arrows - for extra credits*!) to their desired word
++ [x] display the ***definition*** of a word when the person clicks/taps (*or navigates using the keyboard arrows - for extra credits*!) to their desired word
 + [ ] display the ***history*** of words people have searched for
-+ [ ] display the ***stats*** for given words
++ [x] display the ***stats*** for given words
