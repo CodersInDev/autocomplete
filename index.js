@@ -34,11 +34,9 @@ ac.findWord = function (word, callback) {
       found.push(ac.words[i]);
     }
   }
-  console.log('############');
-  console.log(found);
-  console.log('############');
+
   var found2 = stringSort(found, word.toLowerCase());
-  console.log(found2);
+
   return callback(null, found2);
 }
 
@@ -49,12 +47,10 @@ ac.define = function (word, callback){
   var request = http.get(url, function (response){
     response.on('data', function(chunk){
     body+=chunk;
-    console.log(body);
     });
     response.on('end', function(){
       if(response.statusCode === 200){
         wordDef = body;
-        console.log(wordDef);
         return callback(null, wordDef);
       }
     })

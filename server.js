@@ -8,7 +8,6 @@ var http = require('http'),
 
 //initialize the list of words
 ac.import(function(err, count) {
-  console.log("imported a bunch of words! >> ", count.length);
 });
 
 function getUrlAction(url){
@@ -22,7 +21,6 @@ function getUrlWord(url){
 http.createServer(function handler(request, response) {
   var url = request.url;
   getUrlAction(url);
-  console.log("request.url:", url);
   if (url.length === 1) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.end(index.toString());
@@ -54,7 +52,6 @@ http.createServer(function handler(request, response) {
                 response.end("Can't load the ressource!");
             } else {
                 var ext = url.split('.')[1];
-                console.log("this is the extension: " + ext);
                 response.writeHead(200, {'Content-Type' : 'text/' + ext});
                 response.end(data);
             }
@@ -62,4 +59,3 @@ http.createServer(function handler(request, response) {
       }
     }
 }).listen(port);
-console.log('node http server listening on http://localhost:' + port);
