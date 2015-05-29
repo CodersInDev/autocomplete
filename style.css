@@ -91,11 +91,6 @@ html, body {
   cursor: pointer;
 }
 
-#stats {
-  display: none;
-}
-
-
 #defWrap {
   display: none;
   background-color: grey;
